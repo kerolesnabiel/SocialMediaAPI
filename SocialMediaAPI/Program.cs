@@ -1,6 +1,5 @@
 using Serilog;
 using SocialMediaAPI.Extensions;
-using SocialMediaAPI.Middlewares;
 using SocialMediaApplication.Extensions;
 using SocialMediaDomain.Entities;
 using SocialMediaInfrastructure.Extensions;
@@ -20,8 +19,7 @@ try
     var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
     await seeder.Seed();
 
-    app.UseMiddleware<ErrorHandlingMiddleware>();
-
+    app.UseExceptionHandler();
     app.UseSerilogRequestLogging();
 
     if (app.Environment.IsDevelopment())

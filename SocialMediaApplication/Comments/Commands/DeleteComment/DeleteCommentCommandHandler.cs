@@ -28,7 +28,7 @@ public class DeleteCommentCommandHandler(ILogger<DeleteCommentCommandHandler> lo
 
         var isAuthorized = commentAuthorizationService.Authorize(comment, post, ResourceOperation.Delete);
         if (!isAuthorized) throw new ForbidException();
-
+        
         await commentsRepository.DeleteAsync(comment);
     }
 }

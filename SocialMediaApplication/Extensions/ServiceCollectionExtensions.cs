@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mapster;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SocialMediaApplication.Behaviors;
 using SocialMediaApplication.Users;
 using SocialMediaApplication.Users.Dtos;
 
@@ -15,11 +17,12 @@ public static class ServiceCollectionExtensions
 
         TypeAdapterConfig.GlobalSettings.Scan(typeof(UserMappingConfig).Assembly);
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
+        services.AddMediatR(cfg => cfg
+                    .RegisterServicesFromAssembly(applicationAssembly)
+                    .AddOpenBehavior(typeof(ValidationBehavior<,>)));
 
-        services.AddValidatorsFromAssembly(applicationAssembly)
-            .AddFluentValidationAutoValidation();
-
+        services.AddValidatorsFromAssembly(applicationAssembly);
+        
         services.AddScoped<IUserContext, UserContext>();
         services.AddHttpContextAccessor();
 

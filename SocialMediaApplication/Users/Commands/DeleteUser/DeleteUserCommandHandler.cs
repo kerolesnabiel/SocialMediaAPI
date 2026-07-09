@@ -22,7 +22,7 @@ public class DeleteUserCommandHandler(ILogger<DeleteUserCommandHandler> logger,
 
         bool passwordIsCorrect = await userManager.CheckPasswordAsync(user, request.Password);
         if (!passwordIsCorrect)
-            throw new IncorrectException(nameof(request.Password));
+            throw new BadRequestException("Incorrect password");
 
         await usersRepository.DeleteAsync(user);
     }

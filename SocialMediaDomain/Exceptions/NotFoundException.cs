@@ -1,6 +1,8 @@
-﻿namespace SocialMediaDomain.Exceptions;
+﻿using System.Net;
+
+namespace SocialMediaDomain.Exceptions;
 
 public class NotFoundException(string resourceType, string resourceIdentifier)
-    : Exception($"{resourceType} with Id: {resourceIdentifier} doesn't exist")
+    : AppException($"{resourceType} with Id: {resourceIdentifier} doesn't exist", HttpStatusCode.NotFound)
 {
 }
