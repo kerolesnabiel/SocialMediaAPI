@@ -1,20 +1,23 @@
-@SocialMediaAPI_HostAddress = https://localhost:7245
+@SocialMediaAPI_HostAddress = http://localhost:5000
 @token = CfDJ8C8gBUuK-b5MnLDc6zYJyQ4wHLjZuRH_kXEb6xxZ34sxpBWRjIgSYVqpUF793hvtC27Z4xnSJpPLImBtsqRqY8BHSqfVPERyVBjNGPfeodh74Ru9LSJna5okz2Xffmbrf_u-TebDoT8Scvxy6wN_qlp050_80B6P2-482TMNB0Fu8qOeXYcyM0RGNFa9bbFNH2_WK8G5mUk30YtckTrXNKfxqyaZSi1MM2f5qJrSysB9OzuqtLPbn2YAIBakqgJ8wy7dSDpqB0ksKd9UOEWrmUTFF8bxhvWMDg0rp73k2W9nMKtFrPa5i5WBPAa1HVuePXv1z_9oFILHHzJQpcquPFXUVzZnH84oJchfG1pdyneJnparRp0ANOv_p1rWO6gowqBY6OcreSijxWCFDciM0M_8rEiTFH-2MCAF5DO5Bfvio3NCFq-ZNVgtXCQ4qhWIlfh4A96taX0pTCguqB3xKco9rbw8U6I3k9tmuPiDQBen8W8SZOrZ2wWP4DYA_V9Fz7pzvpq51iEtmResmOE75d-OXHbeI3iPEzWoveAfKA2oxlp3iwEEeSiJ764iWyBSAJomFXGW-jugL4qyXg0r_SB60Arq_vCSHC-U_0Bg85bT8_t7E8c_c2oqAS6jg3DkgGt5IFl4XsrGM4OTPBdnhFRaMpL3Zox1UYIPqZ6Te6JuGzcQsG9OMzviLz9_bXZAdY1d-8SBuAqR8CqSHLlNPbHf7WAR79iu8RIqK2Y8Cxd3zlXOJbB5xXjj83mubyJHxg
 
+###
 Post {{SocialMediaAPI_HostAddress}}/api/users/register
 Content-Type: application/json
+
 { 
   "FullName": "Kero Nabil",
-  "Username": "kero",
-  "email": "kero@kero",
+  "Username": "kkee",
+  "email": "k@k",
   "password": "Password1!"
 }
-###
 
+###
 Post {{SocialMediaAPI_HostAddress}}/api/users/login
 Content-Type: application/json
+
 {
-  "email": "k",
+  "email": "k@k",
   "password": "Password1!"
 }
 ###
