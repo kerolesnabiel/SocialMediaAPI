@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -13,8 +13,7 @@ public class UpdateUserCommandHandler(ILogger<UpdateUserCommandHandler> logger,
         IBlobStorageService blobStorageService,
         IUsersRepository usersRepository,
         UserManager<User> userManager,
-        IUserContext userContext,
-        IMapper mapper) : IRequestHandler<UpdateUserCommand>
+        IUserContext userContext) : IRequestHandler<UpdateUserCommand>
 {
     public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
@@ -24,7 +23,11 @@ public class UpdateUserCommandHandler(ILogger<UpdateUserCommandHandler> logger,
         var user = await userManager.FindByIdAsync(currentUser!.Id)
             ?? throw new NotFoundException(nameof(User), currentUser.Id);
 
-        mapper.Map(request, user);
+         TypeAdapterConfig<UpdateUserCommand, User>
+        .NewConfig()
+        .IgnoreNullValues(true); 
+
+        request.Adapt(user);
 
         if (request.Picture != null) 
         {

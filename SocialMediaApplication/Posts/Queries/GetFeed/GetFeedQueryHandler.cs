@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Common;
 using SocialMediaApplication.Posts.Dtos;
-using SocialMediaApplication.Posts.Queries.GetAllPosts;
 using SocialMediaApplication.Users;
 using SocialMediaDomain.Entities;
 using SocialMediaDomain.Exceptions;
@@ -14,8 +13,7 @@ namespace SocialMediaApplication.Posts.Queries.GetFeed;
 public class GetFeedQueryHandler(ILogger<GetFeedQueryHandler> logger,
         IPostsRepository postsRepository,
         IUsersRepository usersRepository,
-        IUserContext userContext,
-        IMapper mapper) : IRequestHandler<GetFeedQuery, PagedResult<PostDto>>
+        IUserContext userContext) : IRequestHandler<GetFeedQuery, PagedResult<PostDto>>
 {
     public async Task<PagedResult<PostDto>> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {
@@ -29,7 +27,7 @@ public class GetFeedQueryHandler(ILogger<GetFeedQueryHandler> logger,
         var (posts, totalCount) = await postsRepository
             .GetFeedAsync(user, request.PageSize, request.PageNumber, request.searchPhase);
 
-        var postDtos = mapper.Map<IEnumerable<PostDto>>(posts);
+        var postDtos = posts.Adapt<IEnumerable<PostDto>>(); 
 
         var result = new PagedResult<PostDto>(postDtos, totalCount, request.PageSize, request.PageNumber);
 

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users.Dtos;
@@ -9,8 +9,7 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Users.Queries.GetUserById;
 
 public class GetUserByIdQueryHandler(ILogger<GetUserByIdQueryHandler> logger,
-    IUsersRepository usersRepository,
-    IMapper mapper) : IRequestHandler<GetUserByIdQuery, UserDto>
+    IUsersRepository usersRepository) : IRequestHandler<GetUserByIdQuery, UserDto>
 {
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
@@ -21,7 +20,7 @@ public class GetUserByIdQueryHandler(ILogger<GetUserByIdQueryHandler> logger,
 
         var (FollowersCount, FollowingCount) = await usersRepository.GetFollowersAndFollowingCountAsync(request.Id);
 
-        var result = mapper.Map<UserDto>(user);
+        var result = user.Adapt<UserDto>();
         result.FollowersCount = FollowersCount;
         result.FollowingCount = FollowingCount;
 

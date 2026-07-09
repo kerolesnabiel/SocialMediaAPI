@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users.Dtos;
@@ -7,8 +7,8 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Users.Queries.SearchForUser;
 
 public class SearchForUserQueryHandler(ILogger<SearchForUserQueryHandler> logger,
-        IUsersRepository usersRepository,
-        IMapper mapper) : IRequestHandler<SearchForUserQuery, IEnumerable<UserMiniDto>>
+        IUsersRepository usersRepository) 
+            : IRequestHandler<SearchForUserQuery, IEnumerable<UserMiniDto>>
 {
     public async Task<IEnumerable<UserMiniDto>> Handle(SearchForUserQuery request, CancellationToken cancellationToken)
     {
@@ -16,6 +16,6 @@ public class SearchForUserQueryHandler(ILogger<SearchForUserQueryHandler> logger
 
         var users = await usersRepository.FindManyContains(request.SearchPhase);
 
-        return mapper.Map<IEnumerable<UserMiniDto>>(users);
+        return users.Adapt<IEnumerable<UserMiniDto>>();
     }
 }

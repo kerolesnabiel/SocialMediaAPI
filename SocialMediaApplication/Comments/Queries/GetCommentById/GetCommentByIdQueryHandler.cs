@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Comments.Dtos;
@@ -12,8 +12,7 @@ namespace SocialMediaApplication.Comments.Queries.GetCommentById;
 public class GetCommentByIdQueryHandler(ILogger<GetCommentByIdQueryHandler> logger,
         IPostsRepository postsRepository,
         ICommentsRepository commentsRepository,
-        IUserContext userContext,
-        IMapper mapper) : IRequestHandler<GetCommentByIdQuery, CommentDto>
+        IUserContext userContext) : IRequestHandler<GetCommentByIdQuery, CommentDto>
 {
     public async Task<CommentDto> Handle(GetCommentByIdQuery request, CancellationToken cancellationToken)
     {
@@ -27,7 +26,7 @@ public class GetCommentByIdQueryHandler(ILogger<GetCommentByIdQueryHandler> logg
         var comment = await commentsRepository.GetByIdAsync(request.CommentId)
              ?? throw new NotFoundException(nameof(Comment), request.CommentId.ToString());
 
-        var result = mapper.Map<CommentDto>(comment);
+        var result = comment.Adapt<CommentDto>();
         result.LikesCount = await commentsRepository.GetLikesCountAsync(request.CommentId);
 
         return result;

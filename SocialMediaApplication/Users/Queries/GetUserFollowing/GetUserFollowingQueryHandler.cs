@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users.Dtos;
@@ -9,8 +9,7 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Users.Queries.GetUserFollowing;
 
 public class GetUserFollowingQueryHandler(ILogger<GetUserFollowingQueryHandler> logger,
-        IUsersRepository usersRepository,
-        IMapper mapper) : IRequestHandler<GetUserFollowingQuery, IEnumerable<UserMiniDto>>
+        IUsersRepository usersRepository) : IRequestHandler<GetUserFollowingQuery, IEnumerable<UserMiniDto>>
 {
     public async Task<IEnumerable<UserMiniDto>> Handle(GetUserFollowingQuery request, CancellationToken cancellationToken)
     {
@@ -19,7 +18,6 @@ public class GetUserFollowingQueryHandler(ILogger<GetUserFollowingQueryHandler> 
         var user = await usersRepository.GetByIdWithFollowingAsync(request.Id)
             ?? throw new NotFoundException(nameof(User), request.Id);
 
-        var result = mapper.Map<IEnumerable<UserMiniDto>>(user.Following);
-        return result;
+        return user.Following.Adapt<IEnumerable<UserMiniDto>>();
     }
 }

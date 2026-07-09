@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users;
@@ -13,9 +13,7 @@ public class UpdatePostCommandHandler(ILogger<UpdatePostCommandHandler> logger,
         IPostAuthorizationService postAuthorizationService,
         IBlobStorageService blobStorageService,
         IPostsRepository postsRepository,
-        IUserContext userContext,
-        IMapper mapper  
-        ) : IRequestHandler<UpdatePostCommand>
+        IUserContext userContext) : IRequestHandler<UpdatePostCommand>
 {
     public async Task Handle(UpdatePostCommand request, CancellationToken cancellationToken)
     {
@@ -29,7 +27,7 @@ public class UpdatePostCommandHandler(ILogger<UpdatePostCommandHandler> logger,
         if (!isAuthorized)
             throw new ForbidException();
 
-        mapper.Map(request, post);
+        request.Adapt(post);
         post.UpdatedAt = DateTime.Now;
 
         if (request.Images != null && request.Images.Count > 0)

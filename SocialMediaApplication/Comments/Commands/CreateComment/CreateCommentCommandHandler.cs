@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users;
@@ -11,8 +11,7 @@ namespace SocialMediaApplication.Comments.Commands.CreateComment;
 public class CreateCommentCommandHandler(ILogger<CreateCommentCommandHandler> logger,
         ICommentsRepository commentsRepository,
         IPostsRepository postsRepository,
-        IUserContext userContext,
-        IMapper mapper) : IRequestHandler<CreateCommentCommand, int>
+        IUserContext userContext) : IRequestHandler<CreateCommentCommand, int>
 {
     public async Task<int> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
     {
@@ -23,7 +22,7 @@ public class CreateCommentCommandHandler(ILogger<CreateCommentCommandHandler> lo
         var post = await postsRepository.GetByIdAsync(request.PostId)
             ?? throw new NotFoundException(nameof(Post), request.PostId.ToString());
 
-        var comment = mapper.Map<Comment>(request);
+        var comment = request.Adapt<Comment>();
         comment.CommenterId = user.Id;
         comment.CreatedAt = DateTime.Now;
 

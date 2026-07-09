@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users;
@@ -13,15 +13,14 @@ public class CreatePostCommandHandler(ILogger<CreatePostCommandHandler> logger,
         IPostAuthorizationService postAuthorizationService,
         IBlobStorageService blobStorageService,
         IPostsRepository postsRepository, 
-        IUserContext userContext,
-        IMapper mapper) : IRequestHandler<CreatePostCommand, int>
+        IUserContext userContext) : IRequestHandler<CreatePostCommand, int>
 {
     public async Task<int> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
         var user = userContext.GetCurrentUser();
         logger.LogInformation("User {UserId} creating new post {@Post}", user!.Id, request);
 
-        var post = mapper.Map<Post>(request);
+        var post = request.Adapt<Post>();
         post.AuthorId = user.Id;
         post.CreatedAt = DateTime.Now;
 

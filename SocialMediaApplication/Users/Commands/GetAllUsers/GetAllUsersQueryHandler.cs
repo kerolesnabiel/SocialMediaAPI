@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Common;
@@ -8,8 +8,8 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Users.Commands.GetAllUsers;
 
 internal class GetAllUsersQueryHandler(ILogger<GetAllUsersQueryHandler> logger,
-        IUsersRepository usersRepository,
-        IMapper mapper) : IRequestHandler<GetAllUsersQuery, PagedResult<UserMiniDto>>
+        IUsersRepository usersRepository) 
+            : IRequestHandler<GetAllUsersQuery, PagedResult<UserMiniDto>>
 {
     public async Task<PagedResult<UserMiniDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
@@ -17,7 +17,7 @@ internal class GetAllUsersQueryHandler(ILogger<GetAllUsersQueryHandler> logger,
 
         var (users, totalCount) = await usersRepository.GetAllAsync(request.PageSize, request.PageNumber);
 
-        var miniUsers = mapper.Map<IEnumerable<UserMiniDto>>(users);
+        var miniUsers = users.Adapt<IEnumerable<UserMiniDto>>();
 
         return new PagedResult<UserMiniDto>(miniUsers, totalCount, request.PageSize, request.PageNumber);
     }

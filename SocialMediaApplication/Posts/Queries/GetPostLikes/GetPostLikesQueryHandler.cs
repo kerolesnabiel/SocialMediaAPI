@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Users.Dtos;
@@ -9,8 +9,8 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Posts.Queries.GetPostLikes;
 
 public class GetPostLikesQueryHandler(ILogger<GetPostLikesQueryHandler> logger,
-        IPostsRepository postsRepository, 
-        IMapper mapper) : IRequestHandler<GetPostLikesQuery, IEnumerable<UserMiniDto>>
+        IPostsRepository postsRepository)
+        : IRequestHandler<GetPostLikesQuery, IEnumerable<UserMiniDto>>
 {
     public async Task<IEnumerable<UserMiniDto>> Handle(GetPostLikesQuery request, CancellationToken cancellationToken)
     {
@@ -19,8 +19,6 @@ public class GetPostLikesQueryHandler(ILogger<GetPostLikesQueryHandler> logger,
         var post = await postsRepository.GetByIdWithLikesAsync(request.Id)
             ?? throw new NotFoundException(nameof(Post), request.Id.ToString());
 
-        var postLikes = mapper.Map<IEnumerable<UserMiniDto>>(post.Likes);
-
-        return postLikes;
+        return post.Likes.Adapt<IEnumerable<UserMiniDto>>();
     }
 }

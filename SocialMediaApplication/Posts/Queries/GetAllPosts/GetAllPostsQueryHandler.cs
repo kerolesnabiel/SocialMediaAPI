@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SocialMediaApplication.Common;
@@ -8,8 +8,8 @@ using SocialMediaDomain.Interfaces;
 namespace SocialMediaApplication.Posts.Queries.GetAllPosts;
 
 public class GetAllPostsQueryHandler(ILogger<GetAllPostsQueryHandler> logger,
-        IPostsRepository postsRepository,
-        IMapper mapper) : IRequestHandler<GetAllPostsQuery, PagedResult<PostDto>>
+        IPostsRepository postsRepository)
+            : IRequestHandler<GetAllPostsQuery, PagedResult<PostDto>>
 {
     public async Task<PagedResult<PostDto>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
     {
@@ -17,7 +17,7 @@ public class GetAllPostsQueryHandler(ILogger<GetAllPostsQueryHandler> logger,
         var (posts, totalCount) = await postsRepository
             .GetAllAsync(request.PageSize, request.PageNumber, request.searchPhase);
 
-        var postDtos = mapper.Map<IEnumerable<PostDto>>(posts);
+        var postDtos = posts.Adapt<IEnumerable<PostDto>>();
 
         var result = new PagedResult<PostDto>(postDtos, totalCount, request.PageSize, request.PageNumber);
 

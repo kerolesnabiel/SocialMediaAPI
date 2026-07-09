@@ -1,8 +1,6 @@
-﻿using AutoMapper.Configuration.Annotations;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Text.Json.Serialization;
+
 
 namespace SocialMediaApplication.Posts.Commands.UpdatePost;
 
