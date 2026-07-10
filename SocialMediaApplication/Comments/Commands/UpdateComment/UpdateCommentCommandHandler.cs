@@ -30,7 +30,7 @@ public class UpdateCommentCommandHandler(ILogger<UpdateCommentCommandHandler> lo
         if (!isAuthorized) throw new ForbidException();
 
         comment.Content = request.Content;
-        comment.UpdatedAt = DateTime.Now;
+        comment.UpdatedAt = DateTime.UtcNow;
 
         await commentsRepository.UpdateAsync(comment);
     }

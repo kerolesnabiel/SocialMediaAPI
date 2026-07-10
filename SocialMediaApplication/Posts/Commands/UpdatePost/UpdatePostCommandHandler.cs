@@ -28,16 +28,14 @@ public class UpdatePostCommandHandler(ILogger<UpdatePostCommandHandler> logger,
             throw new ForbidException();
 
         request.Adapt(post);
-        post.UpdatedAt = DateTime.Now;
+        post.UpdatedAt = DateTime.UtcNow;
 
         if (request.Images != null && request.Images.Count > 0)
         {
             post.Images = [];
-            int x = DateTime.Now.GetHashCode();
-
             foreach (var image in request.Images)
             {
-                string filename = $"post-user-{user.Id}-{x++}.jpeg";
+                string filename = $"post-user-{user.Id}-img-{Guid.NewGuid()}.{image.ContentType.Split('/')[1]}";
                 var stream = image.OpenReadStream();
 
                 string imageUrl = await blobStorageService.UploadToBlobAsync

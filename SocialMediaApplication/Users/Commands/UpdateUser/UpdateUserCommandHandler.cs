@@ -32,7 +32,7 @@ public class UpdateUserCommandHandler(ILogger<UpdateUserCommandHandler> logger,
         if (request.Picture != null) 
         {
             using var stream = request.Picture.OpenReadStream();
-            string filename = $"user-{user.Id}-{DateTime.Now.GetHashCode()}.jpeg";
+            string filename = $"user-{user.Id}-img-{Guid.NewGuid()}.{request.Picture.ContentType.Split('/')[1]}";
 
             var pictureUrl = await blobStorageService.UploadToBlobAsync
                 (stream, filename, ContainerName.UsersContainerName);

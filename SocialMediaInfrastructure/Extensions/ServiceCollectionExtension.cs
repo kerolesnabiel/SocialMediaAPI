@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ public static class ServiceCollectionExtension
     {
         var connectionString = configuration.GetConnectionString("SocialMediaDb");
         services.AddDbContext<SocialMediaDbContext>(
-            options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
+            options => options.UseSqlServer(connectionString));
 
         services.AddIdentityApiEndpoints<User>()
                 .AddRoles<IdentityRole>()
@@ -34,5 +35,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<ISeeder, Seeder>();
 
         services.AddScoped<IBlobStorageService, BlobStorageService>();
+        services.AddSingleton(new BlobServiceClient(configuration.GetConnectionString("BlobStorage")!));
     }
 }

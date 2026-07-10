@@ -22,7 +22,7 @@ public class CreatePostCommandHandler(ILogger<CreatePostCommandHandler> logger,
 
         var post = request.Adapt<Post>();
         post.AuthorId = user.Id;
-        post.CreatedAt = DateTime.Now;
+        post.CreatedAt = DateTime.UtcNow;
 
         bool isAuthorized = postAuthorizationService.Authorize(post, ResourceOperation.Create);
         if (!isAuthorized)
@@ -31,11 +31,9 @@ public class CreatePostCommandHandler(ILogger<CreatePostCommandHandler> logger,
         if(request.Images != null && request.Images.Count > 0)
         {
             post.Images = [];
-            int x = DateTime.Now.GetHashCode();
-
             foreach (var image in request.Images)
             {
-                string filename = $"post-user-{user.Id}-{x++}.jpeg";
+                string filename = $"post-user-{user.Id}-img-{Guid.NewGuid()}.{image.ContentType.Split('/')[1]}";
                 var stream = image.OpenReadStream();
 
                 string imageUrl = await blobStorageService.UploadToBlobAsync

@@ -41,20 +41,19 @@ internal class PostsRepository(SocialMediaDbContext dbContext) : IPostsRepositor
         var posts = await baseQuery
             .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
+            .AsNoTracking()
             .ToListAsync();
 
         return (posts, totalCount);
     }
 
-    public async Task<(IEnumerable<Post>, int)> GetFeedAsync(User user, int pageSize, int pageNumber, string? searchPhase)
+    public async Task<(IEnumerable<Post>, int)> GetFeedAsync(string userId, int pageSize, int pageNumber, string? searchPhase)
     {
-        var followingIds = user.Following.Select(f => f.Id).ToList();
-
         searchPhase = searchPhase?.ToLower();
 
         var baseQuery = dbContext.Posts
-            .Where(p => followingIds.Contains(p.AuthorId) && 
-                (searchPhase == null || p.Content.ToLower().Contains(searchPhase)))
+            .Where(p => p.Author.Followers.Any(f => f.Id == userId))
+            .Where(p => searchPhase == null || p.Content.Contains(searchPhase, StringComparison.CurrentCultureIgnoreCase))
             .OrderByDescending(p => p.CreatedAt);
 
         var totalCount = await baseQuery.CountAsync();
@@ -62,6 +61,7 @@ internal class PostsRepository(SocialMediaDbContext dbContext) : IPostsRepositor
         var posts = await baseQuery
             .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
+            .AsNoTracking()
             .ToListAsync();
 
         return (posts, totalCount);

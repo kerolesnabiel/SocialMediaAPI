@@ -24,7 +24,7 @@ public class CreateCommentCommandHandler(ILogger<CreateCommentCommandHandler> lo
 
         var comment = request.Adapt<Comment>();
         comment.CommenterId = user.Id;
-        comment.CreatedAt = DateTime.Now;
+        comment.CreatedAt = DateTime.UtcNow;
 
         return await commentsRepository.Create(comment);
     }

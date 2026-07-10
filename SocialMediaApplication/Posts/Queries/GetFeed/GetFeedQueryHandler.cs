@@ -21,11 +21,8 @@ public class GetFeedQueryHandler(ILogger<GetFeedQueryHandler> logger,
         logger.LogInformation("Getting feed for user: {UserId}, Page: {PageNumber}",
             currentUser!.Id, request.PageNumber);
 
-        var user = await usersRepository.GetByIdWithFollowingAsync(currentUser.Id)
-            ?? throw new NotFoundException(nameof(User), currentUser.Id);
-
         var (posts, totalCount) = await postsRepository
-            .GetFeedAsync(user, request.PageSize, request.PageNumber, request.searchPhase);
+            .GetFeedAsync(currentUser.Id, request.PageSize, request.PageNumber, request.searchPhase);
 
         var postDtos = posts.Adapt<IEnumerable<PostDto>>(); 
 

@@ -17,7 +17,7 @@ public class RegisterUserCommandHandler(ILogger<RegisterUserCommandHandler> logg
             FullName = request.FullName,
             UserName = request.Username,
             Email = request.Email,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
