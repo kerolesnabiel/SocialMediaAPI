@@ -23,6 +23,7 @@ public class PostsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreatePost([FromForm] CreatePostCommand command)
     {
+        var s = User;
         var id = await mediator.Send(command);
         return CreatedAtAction(nameof(GetPostById), new { id }, null);
     }

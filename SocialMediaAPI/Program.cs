@@ -34,6 +34,7 @@ try
         .WithTags("Users")
         .MapIdentityApi<User>();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

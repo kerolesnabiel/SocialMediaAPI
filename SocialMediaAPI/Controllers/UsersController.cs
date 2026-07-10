@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaApplication.Users.Commands.DeleteUser;
 using SocialMediaApplication.Users.Commands.FollowUser;
+using SocialMediaApplication.Users.Commands.LoginUser;
 using SocialMediaApplication.Users.Commands.RegisterUser;
 using SocialMediaApplication.Users.Commands.UnfollowUser;
 using SocialMediaApplication.Users.Commands.UpdateUser;
@@ -28,6 +30,15 @@ public class UsersController(IMediator mediator) : ControllerBase
             return Ok();
 
         return BadRequest(result.Errors);
+    }
+
+    [HttpPost("login", Order = -1)]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<SignInHttpResult> Login(LoginUserCommand command)
+    {
+        return await mediator.Send(command);
     }
 
     [HttpGet("{id}")]
