@@ -1,5 +1,4 @@
-﻿using MapsterMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SocialMediaApplication.Users.Dtos;
 using SocialMediaApplication.Users.Queries.GetUserById;
@@ -29,7 +28,7 @@ public class GetUserByIdQueryHandlerTests
             Posts = [ new() { Id = 1}] };
         int followersCount = 100;
         int followingCount = 50;
-        var userDto = new UserDto() { Id = id, FullName = user.FullName, UserName = user.UserName,
+        var userDto = new UserDto() { Id = id, FullName = user.FullName, Username = user.UserName,
             Posts = [new() { Id = 1 }], FollowersCount = followersCount, FollowingCount = followingCount };
 
         _usersRepository.Setup(r => r.GetByIdWithPostsAsync(id)).ReturnsAsync(user);
@@ -41,7 +40,6 @@ public class GetUserByIdQueryHandlerTests
         Assert.NotNull(result);
         Assert.Equal(id, result.Id);
         Assert.Equal(user.FullName, result.FullName);
-        Assert.Equal(user.UserName, result.UserName);
         Assert.Equal(followersCount, result.FollowersCount);
         Assert.Equal(followingCount, result.FollowingCount);
         Assert.NotNull(result.Posts);

@@ -31,8 +31,6 @@ internal class PostsRepository(SocialMediaDbContext dbContext) : IPostsRepositor
 
     public async Task<(IEnumerable<Post>, int)> GetAllAsync(int pageSize, int pageNumber, string? searchPhase)
     {
-        searchPhase = searchPhase?.ToLower();
-
         var baseQuery = dbContext.Posts
             .Where(p => searchPhase == null || p.Content.Contains(searchPhase, StringComparison.CurrentCultureIgnoreCase));
 
@@ -49,8 +47,6 @@ internal class PostsRepository(SocialMediaDbContext dbContext) : IPostsRepositor
 
     public async Task<(IEnumerable<Post>, int)> GetFeedAsync(string userId, int pageSize, int pageNumber, string? searchPhase)
     {
-        searchPhase = searchPhase?.ToLower();
-
         var baseQuery = dbContext.Posts
             .Where(p => p.Author.Followers.Any(f => f.Id == userId))
             .Where(p => searchPhase == null || p.Content.Contains(searchPhase, StringComparison.CurrentCultureIgnoreCase))

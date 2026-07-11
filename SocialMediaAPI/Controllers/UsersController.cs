@@ -12,7 +12,6 @@ using SocialMediaApplication.Users.Commands.UpdateUser;
 using SocialMediaApplication.Users.Queries.GetUserById;
 using SocialMediaApplication.Users.Queries.GetUserFollowers;
 using SocialMediaApplication.Users.Queries.GetUserFollowing;
-using System.Security.Principal;
 
 namespace SocialMediaAPI.Controllers;
 

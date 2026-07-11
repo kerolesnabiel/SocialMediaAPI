@@ -8,6 +8,7 @@ public class UserMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
+        config.Default.NameMatchingStrategy(NameMatchingStrategy.IgnoreCase);
         config.NewConfig<UpdateUserCommand, User>().IgnoreNullValues(true);
     }
 }
