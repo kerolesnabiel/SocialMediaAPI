@@ -1,19 +1,18 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using SocialMediaDomain.Entities;
 using SocialMediaDomain.Exceptions;
+using System.Security.Claims;
 
 namespace SocialMediaApplication.Users.Commands.LoginUser;
 
 public class LoginUserCommandHandler(
         ILogger<LoginUserCommandHandler> logger,
         UserManager<User> userManager,
-        SignInManager<User> signInManager) : IRequestHandler<LoginUserCommand, SignInHttpResult>
+        SignInManager<User> signInManager) : IRequestHandler<LoginUserCommand, ClaimsPrincipal>
 {
-    public async Task<SignInHttpResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<ClaimsPrincipal> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Login user");
 
@@ -24,8 +23,6 @@ public class LoginUserCommandHandler(
         if (!result.Succeeded)
             throw new BadRequestException("Invalid username or password");
 
-        var principal = await signInManager.CreateUserPrincipalAsync(user);
-
-        return TypedResults.SignIn(principal, authenticationScheme:IdentityConstants.BearerScheme); 
+        return await signInManager.CreateUserPrincipalAsync(user);
     }
 }
