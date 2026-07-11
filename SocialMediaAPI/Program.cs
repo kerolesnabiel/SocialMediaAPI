@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SocialMediaAPI.Extensions;
 using SocialMediaApplication.Extensions;
@@ -38,6 +39,8 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.MapGet("/", () => Results.Redirect("/swagger"));
 
     app.Run();
 }
