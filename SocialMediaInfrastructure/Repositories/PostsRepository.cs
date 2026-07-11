@@ -34,7 +34,7 @@ internal class PostsRepository(SocialMediaDbContext dbContext) : IPostsRepositor
         searchPhase = searchPhase?.ToLower();
 
         var baseQuery = dbContext.Posts
-            .Where(p => searchPhase == null || p.Content.ToLower().Contains(searchPhase));
+            .Where(p => searchPhase == null || p.Content.Contains(searchPhase, StringComparison.CurrentCultureIgnoreCase));
 
         var totalCount = await baseQuery.CountAsync();
 

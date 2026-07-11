@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
 using Mapster;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SocialMediaApplication.Behaviors;
 using SocialMediaApplication.Users;

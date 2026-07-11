@@ -1,4 +1,4 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi;
 using Serilog;
 using SocialMediaAPI.Handlers;
 
@@ -20,16 +20,10 @@ public static class WebApplicationBuilderExtension
                 Scheme = "Bearer"
             });
 
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "bearerAuth"}
-                        },
-                        []
-                    }
-                });
+            c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("bearerAuth", document)] = []
+            });
 
             // To avoid conflict between identity route and controller route
             c.ResolveConflictingActions(apiDescriptions => apiDescriptions.Last());
