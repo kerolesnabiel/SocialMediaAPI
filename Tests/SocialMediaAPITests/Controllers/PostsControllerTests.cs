@@ -7,6 +7,7 @@ using Moq;
 using SocialMediaApplication.Users;
 using SocialMediaDomain.Entities;
 using SocialMediaDomain.Interfaces;
+using SocialMediaInfrastructure.Seeders;
 using System.Net;
 using System.Text;
 using Xunit;
@@ -20,6 +21,7 @@ public class PostsControllerTests : IClassFixture<WebApplicationFactory<Program>
     private Mock<IPostsRepository> _postRepository = new();
     private Mock<IUsersRepository> _usersRepository = new();
     private Mock<IUserContext> _userContext = new();
+    private Mock<ISeeder> _seeder = new();
 
     public PostsControllerTests(WebApplicationFactory<Program> factory)
     {
@@ -34,6 +36,8 @@ public class PostsControllerTests : IClassFixture<WebApplicationFactory<Program>
                     _ => _usersRepository.Object));
                 services.Replace(ServiceDescriptor.Scoped(typeof(IUserContext),
                     _ => _userContext.Object));
+                services.Replace(ServiceDescriptor.Scoped(typeof(ISeeder),
+                    _ => _seeder.Object));
             });
         });
 
