@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
-using Newtonsoft.Json;
-using SocialMediaApplication.Posts.Commands.CreatePost;
-using SocialMediaApplication.Posts.Commands.UpdatePost;
 using SocialMediaApplication.Users;
 using SocialMediaDomain.Entities;
 using SocialMediaDomain.Interfaces;
@@ -81,7 +78,7 @@ public class PostsControllerTests : IClassFixture<WebApplicationFactory<Program>
         IEnumerable<Post> posts = [new() { Id = 1 }, new() { Id = 2 }];
 
         _usersRepository.Setup(r => r.GetByIdWithFollowingAsync(user.Id)).ReturnsAsync(user);
-        _postRepository.Setup(r => r.GetFeedAsync(user,10, 1, null)).ReturnsAsync((posts, 2));
+        _postRepository.Setup(r => r.GetFeedAsync(user.Id,10, 1, null)).ReturnsAsync((posts, 2));
 
         var client = _factory.CreateClient();
 

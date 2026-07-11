@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using SocialMediaApplication.Users.Dtos;
 using SocialMediaApplication.Users.Queries.GetUserFollowers;
@@ -14,29 +13,29 @@ namespace SocialMediaApplicationTests.Users.Queries.GetUserFollowers
     {
         private Mock<ILogger<GetUserFollowersQueryHandler>> _logger = new();
         private Mock<IUsersRepository> _usersRepository = new();
-        private Mock<IMapper> _mapper = new();
         private GetUserFollowersQueryHandler _handler;
 
         public GetUserFollowersQueryHandlerTests()
         {
-            _handler = new(_logger.Object, _usersRepository.Object, _mapper.Object);
+            _handler = new(_logger.Object, _usersRepository.Object);
         }
 
         [Fact()]
-        public async void Handle_WithValidQuery_GetFollowersList()
+        public async Task Handle_WithValidQuery_GetFollowersList()
         {
             string id = "userId";
             List<User> followers = [new() { Id = "user1" }, new() { Id = "user2" }];
-            List<UserMiniDto> followersDto = [new() { Id = "user1" }, new() { Id = "user2" }];
+            IEnumerable<UserMiniDto> followersDto = [new() { Id = "user1" }, new() { Id = "user2" }];
             User user = new() { Id = id, Followers = followers};
 
             _usersRepository.Setup(r => r.GetByIdWithFollowersAsync(id)).ReturnsAsync(user);
-            _mapper.Setup( m => m.Map<IEnumerable<UserMiniDto>>(followers)).Returns(followersDto);
 
             var result = await _handler.Handle(new(id), CancellationToken.None);
 
             Assert.NotNull(result);
-            Assert.Equal(followersDto, result);
+            Assert.Equal(followersDto.Count(), result.Count());
+            Assert.Equal(followersDto.First().Id, result.First().Id);
+            Assert.Equal(followersDto.Last().Id, result.Last().Id);
             _usersRepository.Verify(r => r.GetByIdWithFollowersAsync(id), Times.Once);
         }
     }

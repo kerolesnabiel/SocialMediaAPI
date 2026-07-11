@@ -37,7 +37,7 @@ public class DeletePostCommandHandlerTests
     }
 
     [Fact()]
-    public async void Handle_WithValidRequest_DeletePost()
+    public async Task Handle_WithValidRequest_DeletePost()
     {
         var id = 1;
         var command = new DeletePostCommand(id);
@@ -54,7 +54,7 @@ public class DeletePostCommandHandlerTests
     }
 
     [Fact()]
-    public async void Handle_WithNonExistingPost_ThrowsNotFoundException()
+    public async Task Handle_WithNonExistingPost_ThrowsNotFoundException()
     {
         var id = 0;
         var command = new DeletePostCommand(id);
@@ -68,7 +68,7 @@ public class DeletePostCommandHandlerTests
     }
 
     [Fact()]
-    public async void Handle_WithNotValidAuthor_ThrowsForbidException()
+    public async Task Handle_WithNotValidAuthor_ThrowsForbidException()
     {
         var id = 1;
         var command = new DeletePostCommand(id);

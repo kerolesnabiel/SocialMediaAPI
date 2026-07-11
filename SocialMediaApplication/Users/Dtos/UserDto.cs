@@ -6,7 +6,7 @@ public class UserDto
 {
     public string Id { get; set; } = default!;
     public string FullName { get; set; } = default!;
-    public string Username { get; set; } = default!;
+    public string UserName { get; set; } = default!;
     public string? Bio { get; set; }
     public string? Picture { get; set; }
     public DateTime? CreatedAt { get; set; }
